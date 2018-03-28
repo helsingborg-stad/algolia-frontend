@@ -53,11 +53,6 @@ class App
             return "native";
         });
 
-        //Always use powerd by option
-        add_filter('option_algolia_powered_by_enabled', function () {
-            return "yes";
-        });
-
         //Always disable autocomplete
         add_filter('option_algolia_autocomplete_enabled', function () {
             return "no";
@@ -69,11 +64,6 @@ class App
         //Remove search engine type option
         add_action('admin_menu', function() {
             remove_submenu_page('algolia','algolia-search-page');
-        }, 50);
-
-        //Remove autocomplete option
-        add_action('admin_menu', function() {
-            //remove_submenu_page('algolia','algolia');
         }, 50);
     }
 
