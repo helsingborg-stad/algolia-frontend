@@ -74,6 +74,10 @@ class App
      */
     public function configurationNotice()
     {
+        if(!current_user_can('administrator')&&!is_superadmin()) {
+            return;
+        }
+
         if(defined('ALGOLIA_FRONTEND_INDEXES')) {
             return;
         }
@@ -91,6 +95,10 @@ class App
      */
     public function pluginNotice()
     {
+        if(!current_user_can('administrator')&&!is_superadmin()) {
+            return;
+        }
+
         add_action('admin_notices', function () {
             echo '<div class="notice notice-success is-dismissible">';
             echo '<p>' .__('Algolia frontend: Could not find Algolia master plugin (Search By Algolia). Please activate this to enable the frontend modifications.', 'algolia-frontend'). '</p>';
