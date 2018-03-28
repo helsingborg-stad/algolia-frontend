@@ -9,7 +9,7 @@ class App
         //Require algolia master plugin
         add_action('init', function () {
             if (!defined('ALGOLIA_PATH')) {
-                $this->notice();
+                $this->pluginNotice();
             } else {
                 $this->init();
             }
@@ -25,6 +25,7 @@ class App
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
 
+        $this->configurationNotice();
         $this->filterSettings();
         $this->removeOptions();
     }
@@ -68,14 +69,31 @@ class App
     }
 
     /**
+     * Requires configuration nag message
+     * @return void
+     */
+    public function configurationNotice()
+    {
+        if(defined('ALGOLIA_FRONTEND_INDEXES')) {
+            return;
+        }
+
+        add_action('admin_notices', function () {
+            echo '<div class="notice notice-success is-dismissible">';
+            echo '<p>' .__('Algolia frontend: Please provide indexes to search. Refer to the documentation on how to configure indexes in wp-config.', 'algolia-frontend'). '</p>';
+            echo '</div>';
+        });
+    }
+
+    /**
      * Requires algolia nag message
      * @return void
      */
-    public function notice()
+    public function pluginNotice()
     {
         add_action('admin_notices', function () {
             echo '<div class="notice notice-success is-dismissible">';
-            echo '<p>' .__('Could not find algolia master plugin (Search By Algolia). Please activate this to enable the frontend modifications.', 'algolia-frontend'). '</p>';
+            echo '<p>' .__('Algolia frontend: Could not find Algolia master plugin (Search By Algolia). Please activate this to enable the frontend modifications.', 'algolia-frontend'). '</p>';
             echo '</div>';
         });
     }
