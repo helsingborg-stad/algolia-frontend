@@ -22,24 +22,59 @@ class App
      */
     public function init()
     {
-        add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+        add_action('admin_enqueue_scripts', array($this, 'adminEnqueueStyles'));
+        add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
+
+        $this->filterSettings();
+        $this->removeOptions();
     }
 
     /**
      * Enqueue required style
      * @return void
      */
-    public function enqueueStyles()
+    public function adminEnqueueStyles($hook)
     {
+        wp_enqueue_style('algolia-frontend-admin', ALGOLIAFRONTEND_URL . '/dist/css/algolia-admin.min.css');
     }
 
     /**
      * Enqueue required scripts
      * @return void
      */
-    public function enqueueScripts()
+    public function adminEnqueueScripts()
     {
+    }
+
+    public function filterSettings()
+    {
+        //Deactivate algolia plugin search
+        add_filter('option_algolia_override_native_search', function () {
+            return "native";
+        });
+
+        //Always use powerd by option
+        add_filter('option_algolia_powered_by_enabled', function () {
+            return "yes";
+        });
+
+        //Always disable autocomplete
+        add_filter('option_algolia_autocomplete_enabled', function () {
+            return "no";
+        });
+    }
+
+    public function removeOptions()
+    {
+        //Remove search engine type option
+        add_action('admin_menu', function() {
+            remove_submenu_page('algolia','algolia-search-page');
+        }, 50);
+
+        //Remove autocomplete option
+        add_action('admin_menu', function() {
+            //remove_submenu_page('algolia','algolia');
+        }, 50);
     }
 
     /**

@@ -1,0 +1,39 @@
+.toplevel_page_algolia {
+
+    form > p {
+        display: none;
+    }
+
+    form .form-table > tbody {
+        > tr:first-of-type {
+            display: none;
+        }
+    }
+
+    .form-table .table-autocomplete {
+        width: 100%;
+    }
+
+    .table-autocomplete tr:not(:first-of-type) {
+        display: none;
+    }
+
+    .table-autocomplete td,
+    .table-autocomplete th {
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(4),
+        &:nth-child(5) {
+            display: none;
+        }
+    }
+
+    .algolia-push-settings-button {
+        display: none;
+    }
+
+    p.description {
+        display: none;
+    }
+}
+
