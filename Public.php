@@ -27,9 +27,16 @@ if(!function_exists('queryAlgoliaSearch')) {
         //Run search helper
         $algolia = new AlgoliaFrontend\Search($appId, $appSecret);
 
+        //Limit search to index?
+        if(isset($_GET['index_id']) && is_numeric($_GET['index_id'])) {
+            $indexId = $_GET['index_id'];
+        }
+
         //Add indexes to search
-        foreach(ALGOLIA_FRONTEND_INDEXES as $index) {
-            $algolia->addIndex($index[0], $index[1]);
+        foreach(ALGOLIA_FRONTEND_INDEXES as $indexKey => $index) {
+            if(is_null($indexId) ||!is_null($indexId) && $indexId == $indexKey) {
+                $algolia->addIndex($index[0], $index[1]);
+            }
         }
 
         //Query
