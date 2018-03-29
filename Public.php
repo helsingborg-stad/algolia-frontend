@@ -7,6 +7,10 @@ if(!function_exists('queryAlgoliaSearch')) {
             return null;
         }
 
+        if(!defined('ALGOLIA_PATH')) {
+            return null;
+        }
+
         if(!is_array(ALGOLIA_FRONTEND_INDEXES) ||empty(ALGOLIA_FRONTEND_INDEXES)) {
             return null;
         }
@@ -15,8 +19,9 @@ if(!function_exists('queryAlgoliaSearch')) {
         $appId      = get_option('algolia_application_id');
         $appSecret  = get_option('algolia_api_key');
 
+        //Return null if settings is faulty
         if(empty($appId)||empty($appSecret)) {
-            return;
+            return null;
         }
 
         //Run search helper
