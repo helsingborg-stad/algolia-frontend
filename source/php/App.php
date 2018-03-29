@@ -23,7 +23,6 @@ class App
     public function init()
     {
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueStyles'));
-        add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
 
         $this->configurationNotice();
         $this->filterSettings();
@@ -37,14 +36,6 @@ class App
     public function adminEnqueueStyles($hook)
     {
         wp_enqueue_style('algolia-frontend-admin', ALGOLIAFRONTEND_URL . '/dist/css/algolia-admin.min.css');
-    }
-
-    /**
-     * Enqueue required scripts
-     * @return void
-     */
-    public function adminEnqueueScripts()
-    {
     }
 
     public function filterSettings()

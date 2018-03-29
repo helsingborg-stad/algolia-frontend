@@ -1,14 +1,24 @@
 <?php
 
-if(!function_exists('queryAlgoliaSearch')) {
-    function queryAlgoliaSearch($query) {
+namespace AlgoliaFrontend;
+
+class Frontend
+{
+    public function __construct()
+    {
+
+
+        add_action('pre_get_posts', array($this, 'makeSearchQuery'));
+    }
+
+    public function queryAlgoliaSearch($query) {
 
         if(!defined('ALGOLIA_FRONTEND_INDEXES')) {
-            return null;
+            return;
         }
 
         if(!is_array(ALGOLIA_FRONTEND_INDEXES) ||empty(ALGOLIA_FRONTEND_INDEXES)) {
-            return null;
+            return;
         }
 
         //Get settings
@@ -28,6 +38,6 @@ if(!function_exists('queryAlgoliaSearch')) {
         }
 
         //Query
-        return $algolia->search($query, 10);
+        $result= $algolia->search($query, 10);
     }
 }

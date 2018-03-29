@@ -5,7 +5,6 @@ namespace AlgoliaFrontend;
 class Search
 {
     private $indexes = []; // Will change each query, do not interpitate as a template
-    private $incides = null;
     private $client;
 
     /**
@@ -24,8 +23,6 @@ class Search
         //Setup extra headers
         $this->client->setExtraHeader("X-Forwarded-For", $_SERVER['REMOTE_ADDR']);
 
-        //Get incides data
-        $this->incides = $this->client->listIndexes()['items'];
     }
 
     /* Add a index for searching. Hits per page may be set to decrease the importance/size of the index (less hits).
