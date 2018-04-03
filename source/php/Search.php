@@ -84,7 +84,6 @@ class Search
             $response = $this->removeInvalidUrls($response);
             $response = $this->sortResponse($response, "score");
 
-
             //Return truncated results
             return array_slice($response, 0, $numberOfResults);
         }
@@ -147,8 +146,9 @@ class Search
                     'post_title'    => $responseItem['post_title'],
                     'post_excerpt'  => $responseItem['_snippetResult']['content']['value'],
                     'post_content'  => $responseItem['content'],
+                    'post_date'     => $responseItem['post_date_formatted'],
                     'permalink'     => $responseItem['permalink'],
-                    'score'         => $responseItem['calculated_score']
+                    'score'         => $responseItem['calculated_score'],
                 );
             }
 

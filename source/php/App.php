@@ -65,7 +65,7 @@ class App
      */
     public function configurationNotice()
     {
-        if(!current_user_can('administrator')&&!is_superadmin()) {
+        if(!current_user_can('administrator')) {
             return;
         }
 
