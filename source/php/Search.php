@@ -36,7 +36,7 @@ class Search
             $this->indexes[$indexName] = array(
                 'indexName' => $indexName,
                 'hitsPerPage' => $hitsPerPage,
-                'getRankingInfo' => true,
+                'getRankingInfo' => true
             );
 
             return true;
@@ -120,8 +120,16 @@ class Search
 
         if(is_array($response) && !empty($response)) {
             foreach($response as $indexResponse) {
+                if(isset($indexResponse['hits']) && !empty($indexResponse['hits']) && is_array($indexResponse['hits'])) {
 
-                if(isset($indexResponse['hits'])) {
+                    //Add identifiers (readable)
+                    foreach($indexResponse['hits'] as $key => $item) {
+                        $indexResponse['hits'][$key]['index_name']  = $this->indexKeyToName($indexResponse['index']);
+                        $indexResponse['hits'][$key]['index_id']    = $this->indexKeyToId($indexResponse['index']);
+                        $indexResponse['hits'][$key]['index_slug']  = $indexResponse['index'];
+                    }
+
+                    //Merge result
                     $mergedResponse = array_merge($mergedResponse, $indexResponse['hits']);
                 }
             }
@@ -149,6 +157,9 @@ class Search
                     'post_date'     => $responseItem['post_date_formatted'],
                     'permalink'     => $responseItem['permalink'],
                     'score'         => $responseItem['calculated_score'],
+                    'index_name'    => $responseItem['index_name'],
+                    'index_id'      => $responseItem['index_id'],
+                    'index_slug'    => $responseItem['index_slug'],
                 );
             }
 
@@ -183,4 +194,21 @@ class Search
         });
     }
 
+    public function indexKeyToName($indexKey) {
+        foreach(ALGOLIA_FRONTEND_INDEXES as $index) {
+            if(in_array($indexKey, $index)) {
+                return $index[2];
+            }
+        }
+        return "";
+    }
+
+    public function indexKeyToId($indexKey) {
+        foreach(ALGOLIA_FRONTEND_INDEXES as $key => $index) {
+            if(in_array($indexKey, $index)) {
+                return $key;
+            }
+        }
+        return 0;
+    }
 }
