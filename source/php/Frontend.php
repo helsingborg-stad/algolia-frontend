@@ -6,8 +6,6 @@ class Frontend
 {
     public function __construct()
     {
-
-
         add_action('pre_get_posts', array($this, 'makeSearchQuery'));
     }
 
@@ -38,6 +36,6 @@ class Frontend
         }
 
         //Query
-        $result= $algolia->search($query, 10);
+        $result= $algolia->search($query, 100);
     }
 }

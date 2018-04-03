@@ -29,19 +29,21 @@ if(!function_exists('queryAlgoliaSearch')) {
 
         //Limit search to index?
         if(isset($_GET['index_id']) && is_numeric($_GET['index_id'])) {
-            $indexId = $_GET['index_id'];
+            $indexId = array($_GET['index_id']);
+        } elseif(isset($_GET['index_id']) && !is_numeric($_GET['index_id'])) {
+            $indexId = (array) explode(",", $_GET['index_id']);
         } else {
             $indexId = null;
         }
 
         //Add indexes to search
         foreach(ALGOLIA_FRONTEND_INDEXES as $indexKey => $index) {
-            if(is_null($indexId) ||!is_null($indexId) && $indexId == $indexKey) {
+            if(is_null($indexId) ||!is_null($indexId) && in_array($indexKey, $indexId)) {
                 $algolia->addIndex($index[0], $index[1]);
             }
         }
 
         //Query
-        return $algolia->search($query, 10);
+        return $algolia->search($query, 100);
     }
 }
