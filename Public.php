@@ -30,6 +30,8 @@ if(!function_exists('queryAlgoliaSearch')) {
         //Limit search to index?
         if(isset($_GET['index_id']) && is_numeric($_GET['index_id'])) {
             $indexId = $_GET['index_id'];
+        } else {
+            $indexId = null;
         }
 
         //Add indexes to search
