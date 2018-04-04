@@ -44,6 +44,6 @@ if(!function_exists('queryAlgoliaSearch')) {
         }
 
         //Query
-        return $algolia->search($query, 100);
+        return $algolia->search($query);
     }
 }
