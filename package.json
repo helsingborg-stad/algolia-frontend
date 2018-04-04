@@ -1,5 +1,5 @@
 {
-  "name": "algolia-frontend",
+  "name": "helsingborg-stad/algolia-frontend",
   "version": "1.0.0",
   "description": "Replaces the standard algolia frontend with our own. Forces algolia to use specific settings.",
   "main": "",
