@@ -1,4 +1,14 @@
 {
+    "name": "helsingborg-stad/algolia-frontend",
+    "description": "Replaces the standard algolia frontend with our own. Forces algolia to use specific settings.",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Thulin",
+            "email": "sebastian.thulin@helsingborg.se"
+        }
+    ],
     "require": {
         "algolia/algoliasearch-client-php": "^1.25"
     }
