@@ -28,12 +28,6 @@ class Search
 
         //Setup extra headers
         $this->client->setExtraHeader("X-Forwarded-For", $_SERVER['REMOTE_ADDR']);
-
-        //Tell what user that made the search
-        if(is_user_logged_in()) {
-            $this->client->setExtraHeader("X-Algolia-User-ID", wp_get_current_user()->display_name);
-        }
-
     }
 
     /* Add a index for searching. Hits per page may be set to decrease the importance/size of the index (less hits).
