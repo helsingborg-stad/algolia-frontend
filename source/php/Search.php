@@ -20,7 +20,7 @@ class Search
         if(defined('ALGOLIA_FRONTEND_RESULTS')) {
             $this->numberOfResults = ALGOLIA_FRONTEND_RESULTS;
         } else {
-            $this->numberOfResults = 50;
+            $this->numberOfResults = 150;
         }
 
         //Init client
