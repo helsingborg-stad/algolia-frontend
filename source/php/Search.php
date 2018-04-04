@@ -23,6 +23,11 @@ class Search
         //Setup extra headers
         $this->client->setExtraHeader("X-Forwarded-For", $_SERVER['REMOTE_ADDR']);
 
+        //Tell what user that made the search
+        if(is_user_logged_in()) {
+            $this->client->setExtraHeader("X-Algolia-User-ID", wp_get_current_user()->display_name);
+        }
+
     }
 
     /* Add a index for searching. Hits per page may be set to decrease the importance/size of the index (less hits).
@@ -101,7 +106,13 @@ class Search
             foreach($response as $indexKey => $index) {
                 if(is_array($response[$indexKey]['hits']) && !empty($response[$indexKey]['hits'])) {
                     foreach ($response[$indexKey]['hits'] as $objectKey => $object) {
-                        $response[$indexKey]['hits'][$objectKey]['calculated_score'] = ((($objectKey + 1)) / (count($response[$indexKey]['hits']) + 1)) * 1;
+
+                        //Calculate score
+                        $score = array(
+                            'defaultPosition' => ((int) ($objectKey+1) / count($response[$indexKey]['hits']) * 100) * 0.2 // Simple merge by position in each result. Lower multiplication in the end, will bring each site "closer" to eachother.
+                        );
+
+                        $response[$indexKey]['hits'][$objectKey]['calculated_score'] = abs(array_sum($score));
                     }
                 }
             }
