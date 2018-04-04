@@ -17,6 +17,12 @@ class Search
             die("Could not connect to Algolia search API due to missing client or secret key.");
         }
 
+        if(defined('ALGOLIA_FRONTEND_RESULTS')) {
+            $this->numberOfResults = ALGOLIA_FRONTEND_RESULTS;
+        } else {
+            $this->numberOfResults = 50;
+        }
+
         //Init client
         $this->client = new \AlgoliaSearch\Client($client, $secret);
 
@@ -57,8 +63,13 @@ class Search
      * @param integer $numberOfResults Truncate number of results to N objects.
      * @return array Formatted response of found items, or empty array.
      */
-    public function search($searchQuery, $numberOfResults = 50) : array
+    public function search($searchQuery, $numberOfResults = null) : array
     {
+
+        if(!is_numeric($numberOfResults)) {
+            $numberOfResults = $this->numberOfResults;
+        }
+
         if(isset($this->indexes) && is_array($this->indexes) && !empty($this->indexes)) {
 
             //Create multi index query
