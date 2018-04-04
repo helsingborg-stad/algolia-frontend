@@ -194,7 +194,11 @@ class Search
         });
     }
 
-    public function indexKeyToName($indexKey) {
+    /* Translate index key to name of index
+     * @param string The index key (from algolia)
+     * @return string The name of index
+     */
+    public function indexKeyToName($indexKey) : string {
         foreach(ALGOLIA_FRONTEND_INDEXES as $index) {
             if(in_array($indexKey, $index)) {
                 return $index[2];
@@ -203,7 +207,11 @@ class Search
         return "";
     }
 
-    public function indexKeyToId($indexKey) {
+    /* Translate index key to (local)id of index
+     * @param string The index key (from algolia)
+     * @return string The id of index
+     */
+    public function indexKeyToId($indexKey) : int {
         foreach(ALGOLIA_FRONTEND_INDEXES as $key => $index) {
             if(in_array($indexKey, $index)) {
                 return $key;
