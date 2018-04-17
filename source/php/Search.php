@@ -13,11 +13,11 @@ class Search
      */
     public function __construct($client, $secret)
     {
-        if (is_null($client) ||is_null($secret)) {
+        if(is_null($client) ||is_null($secret)) {
             die("Could not connect to Algolia search API due to missing client or secret key.");
         }
 
-        if (defined('ALGOLIA_FRONTEND_RESULTS')) {
+        if(defined('ALGOLIA_FRONTEND_RESULTS')) {
             $this->numberOfResults = ALGOLIA_FRONTEND_RESULTS;
         } else {
             $this->numberOfResults = 150;
@@ -37,7 +37,7 @@ class Search
      */
     public function addIndex($indexName, $hitsPerPage = 500) : bool
     {
-        if (isset($indexName) && !empty($indexName)) {
+        if(isset($indexName) && !empty($indexName)) {
             $this->indexes[$indexName] = array(
                 'indexName' => $indexName,
                 'hitsPerPage' => $hitsPerPage,
@@ -59,32 +59,26 @@ class Search
      */
     public function search($searchQuery, $numberOfResults = null) : array
     {
-        if (!is_numeric($numberOfResults)) {
+
+        if(!is_numeric($numberOfResults)) {
             $numberOfResults = $this->numberOfResults;
         }
 
-        if (isset($this->indexes) && is_array($this->indexes) && !empty($this->indexes)) {
+        if(isset($this->indexes) && is_array($this->indexes) && !empty($this->indexes)) {
 
             //Create multi index query
-            foreach ($this->indexes as &$index) {
+            foreach($this->indexes as &$index) {
                 $index['query'] = $searchQuery;
             }
 
-            //Define cache key & group
-            $cacheKey = md5($this->indexes) . md5($searchQuery);
-            $cacheGroup = 'algolia-frontend';
-
             //Make search
-            if (!$response = wp_cache_get($cacheKey, $cacheGroup)) {
-                $response = $this->client->multipleQueries($this->indexes)['results'];
-                wp_cache_add($cacheKey, $response, $cacheGroup, 60*15);
-            }
+            $response = $this->client->multipleQueries($this->indexes)['results'];
 
             //Make calc of relative score
             $response = $this->calculateRelativeScore($response);
 
             //Return empty response if no matches
-            if (!array_filter($response, function ($check) {
+            if(!array_filter($response, function($check) {
                 return !empty($check['hits']); }
             )) {
                 return array();
@@ -113,9 +107,9 @@ class Search
      */
     public function calculateRelativeScore($response) : array
     {
-        if (is_array($response) && !empty($response)) {
-            foreach ($response as $indexKey => $index) {
-                if (is_array($response[$indexKey]['hits']) && !empty($response[$indexKey]['hits'])) {
+        if(is_array($response) && !empty($response)) {
+            foreach($response as $indexKey => $index) {
+                if(is_array($response[$indexKey]['hits']) && !empty($response[$indexKey]['hits'])) {
                     foreach ($response[$indexKey]['hits'] as $objectKey => $object) {
 
                         //Calculate score
@@ -140,12 +134,12 @@ class Search
     {
         $mergedResponse = [];
 
-        if (is_array($response) && !empty($response)) {
-            foreach ($response as $indexResponse) {
-                if (isset($indexResponse['hits']) && !empty($indexResponse['hits']) && is_array($indexResponse['hits'])) {
+        if(is_array($response) && !empty($response)) {
+            foreach($response as $indexResponse) {
+                if(isset($indexResponse['hits']) && !empty($indexResponse['hits']) && is_array($indexResponse['hits'])) {
 
                     //Add identifiers (readable)
-                    foreach ($indexResponse['hits'] as $key => $item) {
+                    foreach($indexResponse['hits'] as $key => $item) {
                         $indexResponse['hits'][$key]['index_name']  = $this->indexKeyToName($indexResponse['index']);
                         $indexResponse['hits'][$key]['index_id']    = $this->indexKeyToId($indexResponse['index']);
                         $indexResponse['hits'][$key]['index_slug']  = $indexResponse['index'];
@@ -169,8 +163,9 @@ class Search
     {
         $simplifiedResponse = [];
 
-        if (is_array($response) && !empty($response)) {
-            foreach ($response as $responseItem) {
+        if(is_array($response) && !empty($response)) {
+
+            foreach($response as $responseItem) {
                 $simplifiedResponse[] = array(
                     'post_title'    => $responseItem['post_title'],
                     'post_excerpt'  => $responseItem['_snippetResult']['content']['value'],
@@ -197,7 +192,7 @@ class Search
      */
     public function sortResponse($response, $sortKey = "score") : array
     {
-        usort($response, function ($a, $b) use ($sortKey) {
+        usort($response, function ($a, $b) use($sortKey) {
             return $a[$sortKey] <=> $b[$sortKey];
         });
 
@@ -210,7 +205,7 @@ class Search
      */
     public function removeInvalidUrls($response) : array
     {
-        return array_filter($response, function ($item) {
+        return array_filter($response, function($item) {
             return !preg_match("/page_id/i", $item['permalink']);
         });
     }
@@ -219,10 +214,9 @@ class Search
      * @param string The index key (from algolia)
      * @return string The name of index
      */
-    public function indexKeyToName($indexKey) : string
-    {
-        foreach (ALGOLIA_FRONTEND_INDEXES as $index) {
-            if (in_array($indexKey, $index)) {
+    public function indexKeyToName($indexKey) : string {
+        foreach(ALGOLIA_FRONTEND_INDEXES as $index) {
+            if(in_array($indexKey, $index)) {
                 return $index[2];
             }
         }
@@ -233,10 +227,9 @@ class Search
      * @param string The index key (from algolia)
      * @return string The id of index
      */
-    public function indexKeyToId($indexKey) : int
-    {
-        foreach (ALGOLIA_FRONTEND_INDEXES as $key => $index) {
-            if (in_array($indexKey, $index)) {
+    public function indexKeyToId($indexKey) : int {
+        foreach(ALGOLIA_FRONTEND_INDEXES as $key => $index) {
+            if(in_array($indexKey, $index)) {
                 return $key;
             }
         }
