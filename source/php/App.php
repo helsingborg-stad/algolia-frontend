@@ -86,7 +86,7 @@ class App
      */
     public function pluginNotice()
     {
-        if(!current_user_can('administrator')&&!is_superadmin()) {
+        if(!current_user_can('administrator')) {
             return;
         }
 
